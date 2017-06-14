@@ -12,6 +12,7 @@
     function ClientController($rootScope, $scope, server, $state, $interval) {
 
         var getOSName = function () {
+            alert(navigator.appVersion);
             var OSName = "Unknown OS";
             if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
             if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
