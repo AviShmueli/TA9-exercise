@@ -6,21 +6,20 @@
         .controller('AdminController', AdminController);
 
     AdminController.$inject = [
-                        '$rootScope', '$scope', 'server', '$state',
-                        '$mdSidenav', '$mdComponentRegistry'
+        '$rootScope', '$scope', 'server', '$state',
+        '$mdSidenav', '$mdComponentRegistry', '$log'
     ];
 
-    function AdminController($rootScope, $scope, shared, $state, 
-                              $mdSidenav, $mdComponentRegistry) {
+    function AdminController($rootScope, $scope, server, $state,
+        $mdSidenav, $mdComponentRegistry, $log) {
 
 
         var vm = this;
 
-        vm.auth = shared.info.auth;
-
         vm.toggle = angular.noop;
 
         vm.title = $state.current.title;
+        //vm.allClients = [];
 
         this.isOpen = function () {
             return false
@@ -41,6 +40,22 @@
             $mdSidenav("right").close()
                 .then(function () {});
         };
+
+        server.getClients(0).then(function (result) {
+            vm.allClients = result.data;
+        }, function (error) {
+            $log.error('Error while tying to get all clients :', error);
+        });
+
+        /*
+        $scope.$watch(function () {
+            return datacontext.getUserFromLocalStorage()
+        }, function (oldVal, newVal) {
+            vm.user = newVal;
+            vm.imagesPath = device.getImagesPath();
+        }, true);
+        */
+
 
     }
 

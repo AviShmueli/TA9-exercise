@@ -2,25 +2,19 @@
 
 (function (BL) {
 
-    BL.deleteGroups = deleteGroups;
-    BL.getUsersInCliqa = getUsersInCliqa;
+    BL.registerNewClient = registerNewClient;
+    BL.getClients = getClients;
 
     var deferred = require('deferred');
 
     var DAL = require('./DAL');
 
-    function deleteGroups(groupIds) {
+    function registerNewClient(client) {
 
         var d = deferred();
 
-        var newGroupIds = [];
-        for (var i = 0; i < groupIds.length; i++) {
-            var groupId = groupIds[i];
-            newGroupIds.push(new ObjectID(groupId));
-        }
-
-        DAL.deleteGroups(newGroupIds).then(function (result) {
-            d.resolve(result);
+        DAL.registerNewClient(client).then(function () {
+            d.resolve(client);
         }, function (error) {
             d.deferred(error);
         });
@@ -30,11 +24,11 @@
 
 
 
-    function getUsersInCliqa(cliqaId) {
+    function getClients(page) {
 
         var d = deferred();
 
-        DAL.getUsersInCliqa(cliqaId).then(function (result) {
+        DAL.getClients(page).then(function (result) {
             d.resolve(result);
         }, function (error) {
             d.deferred(error);

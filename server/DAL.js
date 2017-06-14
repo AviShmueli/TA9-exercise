@@ -2,11 +2,14 @@
 
 (function (DAL) {
 
-    DAL.deleteGroups = deleteGroups;
-    DAL.getUsersInCliqa = getUsersInCliqa;
+    DAL.registerNewClient = registerNewClient;
+    DAL.getClients = getClients;
 
-
+    var mongodb = require('mongodb').MongoClient;
+    var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
+
+    var mongoUrl = 'mongodb://admin:1234@ds123312.mlab.com:23312/ta9-exercise';
 
     function getCollection(collectionName) {
 
@@ -36,61 +39,46 @@
         return d.promise;
     }
 
-
-
-    function deleteGroups(groupIds) {
+    function registerNewClient(client) {
         var d = deferred();
 
-        getCollection('users').then(function (mongo) {
+        getCollection('clients').then(function (mongo) {
 
-            mongo.collection.remove({
-                    '_id': {
-                        $in: groupIds
-                    }
-                },
-                function (err, result) {
-                    if (err) {
-                        var errorObj = {
-                            message: "error while trying to remove Group ",
-                            error: err
-                        };
-                        mongo.db.close();
-                        d.reject(errorObj);
-                    }
+            mongo.collection.insert(client, function (err, results) {
 
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to add new Client to DB",
+                        error: err
+                    };
                     mongo.db.close();
-                    d.resolve(result.ops);
-                });
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(results);
+
+            });
         });
 
         return d.promise;
     }
 
-    function getUsersInCliqa(cliqaId) {
+    function getClients(page) {
 
         var d = deferred();
 
-        getCollection('users').then(function (mongo) {
+        page = parseInt(page)
 
-            mongo.collection.find({
-                'cliqot._id': new ObjectID(cliqaId),
-                cliqot: {
-                    $exists: true
-                }
-            }, {
-                '_id': true,
-                'name': true,
-                'avatarUrl': true,
-                'type': true,
-                'usersInGroup': true,
-                'phone': true,
-                'creatorId': true
-                //'cliqot': true
+        getCollection('clients').then(function (mongo) {
+
+            mongo.collection.find({}, {
+                skip: page,
+                limit: 20
             }).toArray(function (err, result) {
-
                 if (err) {
                     var errorObj = {
-                        message: "error while trying search user: ",
+                        message: "error while trying to get Clients:",
                         error: err
                     };
                     mongo.db.close();

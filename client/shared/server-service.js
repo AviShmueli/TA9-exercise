@@ -24,8 +24,34 @@
             return $http(req);
         }
 
+        var keepMeAlive = function (clientId) {
+            var req = {
+                method: 'POST',
+                url: '/keepMeAlive',
+                data: {
+                    clientId: clientId
+                }
+            };
+
+            return $http(req);
+        }
+
+        var getClients = function (page) {
+            var req = {
+                method: 'GET',
+                url: '/getClients',
+                params: {
+                    page: page
+                }
+            };
+
+            return $http(req);
+        }
+
         var service = {
-            registerNewClient: registerNewClient
+            registerNewClient: registerNewClient,
+            keepMeAlive: keepMeAlive,
+            getClients: getClients
         };
 
         return service;

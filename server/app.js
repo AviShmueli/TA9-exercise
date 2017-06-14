@@ -38,24 +38,41 @@ server.listen(process.env.PORT || 5009, function (err) {
 app.post('/registerNewClient', function (req, res) {
     
     var client = req.body.client;
-    var ip = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
     
-    client['IP'] = ip;
-    //BL.deleteGroups(req.body.groupIds).then(function(result) {
-    res.send(client);
-    //}, function(error) {
-    //    logger.log('error', error.message , error.error);
-    //    res.status(500).send(error); 
-    //});
+    client['IP'] = getClientIP(req);
 
+    if (client._id === undefined) {
+        BL.registerNewClient(client).then(function(result) {
+            res.send(client);
+            console.log('info', 'New client just connected to the app: ' , result);
+        }, function(error) {
+            console.log('error', error.message , error.error);
+            res.status(500).send(error); 
+        });
+    }
+    else{
+        res.send(client);
+        console.log('info', 'Client reconnected to the app: ' , result);
+    }
 });
 
-app.get('/TaskManeger/getUsersInCliqa', function (req, res) {
+app.post('/keepMeAlive', function (req, res) {
+    
+    var clientId = req.body.clientId;
+    
+    /*BL.registerNewClient(client).then(function(result) {
+        res.send(client);
+        console.log('info', 'New client just connected to the app: ' , result);
+    }, function(error) {
+        console.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });*/
+    res.send('ok');
+});
 
-    BL.getUsersInCliqa(req.query.cliqaId).then(function (result) {
+app.get('/getClients', function (req, res) {
+
+    BL.getClients(req.query.page).then(function (result) {
         res.send(result);
     }, function (error) {
         logger.log('error', error.message, error.error);
@@ -63,3 +80,10 @@ app.get('/TaskManeger/getUsersInCliqa', function (req, res) {
     });
 
 });
+
+var getClientIP = function(req){
+    return req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+}

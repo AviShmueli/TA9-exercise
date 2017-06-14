@@ -4,46 +4,33 @@
       <md-icon>menu</md-icon>
     </md-button>
     <p>{{ vm.title }}</p>
+    <span flex></span>
     <div style="width: 40px; height: 40px;"></div>
   </div>
 </md-toolbar>
 
 <md-sidenav class="md-sidenav-left" md-component-id="left">
   <md-toolbar>
-    <h1 class="md-toolbar-tools">SideNav Menu</h1>
+    <h1 class="md-toolbar-tools">Dashboard Menu</h1>
   </md-toolbar>
   <md-list ng-cloak>
-    <md-list-item ng-href="http://www.google.com/design/spec/material-design/introduction.html">
-      <md-icon style="padding-right: 16px; color: #000000">school</md-icon>
-      <p>Material Design</p>
-    </md-list-item>
-    <md-list-item ng-href="https://material.angularjs.org/latest/">
-      <md-icon style="padding-right: 16px; color: #000000">settings_ethernet</md-icon>
-      <p>Angular Material</p>
+    <md-list-item ng-href="#/admin">
+      <md-icon style="padding-right: 16px; color: #000000">dashboard</md-icon>
+      <p>Server Admin</p>
     </md-list-item>
   </md-list>
 </md-sidenav>
 
-<div layout="column" layout-align="center center" flex>
-  <md-whiteframe class="md-whiteframe-3dp" layout="column" style="margin: 1em; width: 22em; height: 15em;" flex>
-    <div layout="column" flex style="margin-left: 1em;">
-      <h4>Project:</h4>
-      <p style="margin-top: -1em;">Cordova-Angular-AngularMaterial-Seed</p>
-      <h4>Created by:</h4>
-      <p style="margin-top: -1em;">MarioAleo</p>
-    </div>
-    <md-divider></md-divider>
-    <div layout="row" layout-align="space-around center" flex="20">
-      <md-button class="md-icon-button" aria-label="Project" ng-href="https://github.com/mario-aleo/cordova-angular-angularMaterial-seed">
-        <md-icon style="color: #000000">book</md-icon>
-      </md-button>
-      <md-button class="md-icon-button" aria-label="Creator" ng-href="https://github.com/mario-aleo">
-        <md-icon style="color: #000000">favorite</md-icon>
-      </md-button>
-    </div>
-  </md-whiteframe>
 
-  <md-button class="md-fab md-primary" aria-label="Menu">
-    <md-icon>menu</md-icon>
-  </md-button>
-</div>
+<md-content layout-padding md-scroll-y style="height: 100%">
+  <md-grid-list ng-if="vm.allClients !== undefined && vm.allClients.length > 0" md-cols-gt-md="4" md-cols="2" md-cols-md="3" md-cols-xs="1" md-row-height-gt-md="4:3" md-row-height="4:3" md-gutter-gt-md="16px"
+    md-gutter-md="8px" md-gutter="4px">
+    <md-grid-tile ng-repeat="currClient in vm.allClients" md-colspan-gt-sm="1" md-rowspan-gt-sm="1">
+      <client-view client="currClient"></client-view>
+    </md-grid-tile>
+  </md-grid-list>
+  <div ng-if="vm.allClients === undefined || vm.allClients.length === 0"
+       layout-align="center center" layout="row">
+    <h2>There is no clients connected to the server !</h2>
+  </div>
+</md-content>

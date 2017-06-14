@@ -82,3 +82,17 @@ body {
 * .md-focused {
     background-color: rgba(0, 0, 0, 0) !important;
 }
+
+#client-fileds > div {
+    margin: 8px;
+}
+
+.client-view-wrap {
+    padding: 4px; 
+    margin: 1em; 
+    width: 22em; 
+    height: 13em;
+}
+
+md-grid-list {
+  margin: 8px; }
