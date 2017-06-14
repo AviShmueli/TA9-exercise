@@ -1,0 +1,19 @@
+<md-toolbar flex>
+  <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+    <p>{{ ::vm.title }}</p>
+    <div style="width: 40px; height: 40px;"></div>
+  </div>
+</md-toolbar>
+
+
+<div layout="column" layout-align="center center" flex >
+  <md-whiteframe class="md-whiteframe-3dp" layout="column" layout-margin flex>
+    <div layout="column" flex style="margin-left: 1em;">
+      <h4>IP: <span>{{vm.client.IP}}</span></h4>   
+      <h4>OS: <span>{{::vm.client.OS}}</span></h4>     
+      <h4>Local Time: <span>{{vm.client.localTime | date:'h:mm a'}}</span></h4>      
+      <h4>Time Zone: <span>{{::vm.client.timeZone}}</span></h4>      
+      <h4>Browser: <span>{{::vm.client.browser}}</span></h4>     
+    </div>
+  </md-whiteframe>
+</div>
