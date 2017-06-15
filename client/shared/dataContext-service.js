@@ -35,11 +35,15 @@
 
         var addClient = function (client) {
             var clients = getClients();
-            if (clients.indexOf(client.id) === -1) {
+
+            var matchs = clients.filter(function (obj) {
+                return obj.id === client.id;
+            });
+
+            if (matchs.length < 1) {
                 clients.push(client);
-            }
-            
-            $rootScope.$apply();
+                $rootScope.$apply();
+            }     
         }
 
         var setClientId = function(clientId){
