@@ -7,11 +7,14 @@
 
     AdminController.$inject = [
         '$rootScope', '$scope', 'server', '$state',
-        '$mdSidenav', '$mdComponentRegistry', '$log'
+        '$mdSidenav', '$mdComponentRegistry', '$log',
+        'dataContext', '$timeout', 'socket'
     ];
 
-    function AdminController($rootScope, $scope, server, $state,
-        $mdSidenav, $mdComponentRegistry, $log) {
+    function AdminController(
+        $rootScope, $scope, server, $state,
+        $mdSidenav, $mdComponentRegistry, $log,
+        dataContext, $timeout, socket) {
 
 
         var vm = this;
@@ -20,41 +23,36 @@
 
         vm.title = $state.current.title;
         //vm.allClients = [];
+        vm.allClients = dataContext.getClients();
+        vm.loading = false;
 
-        this.isOpen = function () {
-            return false
-        };
-        $mdComponentRegistry
-            .when("left")
-            .then(function (sideNav) {
-                vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
-                vm.toggle = angular.bind(sideNav, sideNav.toggle);
+        if (vm.allClients.length === 0) {
+            vm.loading = true;
+            server.getClients().then(function (result) {
+                dataContext.setClients(result.data);
+                vm.loading = false;
+            }, function (error) {
+                $log.error('Error while tying to get all clients :', error);
             });
+        }
 
-        vm.toggleRight = function () {
-            $mdSidenav("left").toggle()
-                .then(function () {});
-        };
-
-        vm.close = function () {
-            $mdSidenav("right").close()
-                .then(function () {});
-        };
-
-        server.getClients(0).then(function (result) {
-            vm.allClients = result.data;
-        }, function (error) {
-            $log.error('Error while tying to get all clients :', error);
-        });
-
-        /*
         $scope.$watch(function () {
-            return datacontext.getUserFromLocalStorage()
-        }, function (oldVal, newVal) {
-            vm.user = newVal;
-            vm.imagesPath = device.getImagesPath();
+            return dataContext.getClients();
+        }, function (newVal, oldVal) {
+            vm.allClients = newVal;
         }, true);
-        */
+
+        vm.toggleSidenav = function (menuId) {
+            $mdSidenav(menuId).toggle();
+        };
+
+        /*$timeout(function(){
+            server.getClients(0).then(function (result) {
+                dataContext.addClients(result.data);
+            }, function (error) {
+                $log.error('Error while tying to get all clients :', error);
+            });
+        }, 10000);*/
 
 
     }

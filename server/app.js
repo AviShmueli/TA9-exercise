@@ -3,12 +3,13 @@
 var express = require('express');
 var BL = require('./BL');
 
-
 var app = express();
 
 var http = require('http');
 
 var server = http.createServer(app);
+
+var socket = require('./socketIO')(server);
 
 var bodyParser = require('body-parser');
 
@@ -18,8 +19,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-
-
 app.use(express.static('./client'));
 app.use(express.static('./bower_components'));
 app.use(express.static('./node_modules'));
@@ -41,43 +40,32 @@ app.post('/registerNewClient', function (req, res) {
     
     client['IP'] = getClientIP(req);
 
-    if (client._id === undefined) {
-        BL.registerNewClient(client).then(function(result) {
-            res.send(client);
-            console.log('info', 'New client just connected to the app: ' , result);
-        }, function(error) {
-            console.log('error', error.message , error.error);
-            res.status(500).send(error); 
-        });
+    if (!client.hasOwnProperty('id')) {        
+        BL.registerNewClient(client);
+        res.send(client);
+        console.log('info', 'New client just connected to the app: ' , client);
     }
     else{
         res.send(client);
-        console.log('info', 'Client reconnected to the app: ' , result);
+        console.log('info', 'Client reconnected to the app: ' , client);
     }
+
+    socket.sendNewClientToAdmin(client);
 });
 
-app.post('/keepMeAlive', function (req, res) {
-    
-    var clientId = req.body.clientId;
-    
-    /*BL.registerNewClient(client).then(function(result) {
-        res.send(client);
-        console.log('info', 'New client just connected to the app: ' , result);
-    }, function(error) {
-        console.log('error', error.message , error.error);
-        res.status(500).send(error); 
-    });*/
+app.post('/keepMeAlive', function (req, res) {       
+    BL.addClientToAliveList(req.body.clientId);
     res.send('ok');
 });
 
 app.get('/getClients', function (req, res) {
 
-    BL.getClients(req.query.page).then(function (result) {
-        res.send(result);
-    }, function (error) {
-        logger.log('error', error.message, error.error);
-        res.status(500).send(error);
-    });
+    var clients = BL.getClients()
+    res.send(clients);
+    //}, function (error) {
+    //    logger.log('error', error.message, error.error);
+    //    res.status(500).send(error);
+    //});
 
 });
 
@@ -87,3 +75,11 @@ var getClientIP = function(req){
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
 }
+
+var interval = setInterval(function() {
+    var updateObj = BL.getUpdateAdminObject();
+    if (updateObj !== null) {             
+        socket.sendUpdateToAdmin(updateObj);
+    }
+}, 10000);
+

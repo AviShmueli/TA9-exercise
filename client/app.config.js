@@ -5,9 +5,14 @@
         .module('app')
         .config(config);
 
-    config.$inject = ['$stateProvider', '$urlRouterProvider'];
+    config.$inject = ['$stateProvider', '$urlRouterProvider', '$mdThemingProvider'];
 
-    function config($stateProvider, $urlRouterProvider) {
+    function config($stateProvider, $urlRouterProvider, $mdThemingProvider) {
+
+        $mdThemingProvider.theme('default')
+            .primaryPalette('brown')
+            .accentPalette('orange');
+
         $urlRouterProvider.otherwise("/");
 
         $stateProvider.state("/", {

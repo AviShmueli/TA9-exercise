@@ -20,10 +20,10 @@
 
         var currTime = new Date();
         var client = {
-            localTime: currTime,
             timeZone: (currTime.getTimezoneOffset() / 60) + ' hours',
             OS: device.getOSName(),
-            browser: device.getBrowserName()
+            browser: device.getBrowserName(),
+            isConnected: true
         };
 
         server.registerNewClient(client).then(function (result) {
@@ -33,12 +33,6 @@
         }, function (error) {
             $log.error('Error while tying to register new client to the app: ', error);
         });
-
-        $interval(function () {
-            if (vm.client !== null) {
-                vm.client.localTime = new Date();
-            }
-        }, 1000);
 
         $interval(function () {
             server.keepMeAlive(vm.client.id);

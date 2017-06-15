@@ -83,8 +83,19 @@ body {
     background-color: rgba(0, 0, 0, 0) !important;
 }
 
+#client-fileds {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
 #client-fileds > div {
     margin: 8px;
+    font-weight: bold;
+    width: 180px;
+}
+
+#client-fileds > div > span {
+    font-weight: normal !important;
 }
 
 .client-view-wrap {

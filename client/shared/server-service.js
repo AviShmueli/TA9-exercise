@@ -5,9 +5,9 @@
         .module('app')
         .service('server', server);
 
-    server.$inject = ['$http'];
+    server.$inject = ['$http', 'dataContext'];
 
-    function server($http) {
+    function server($http, dataContext) {
 
 
         var self = this;
@@ -36,17 +36,28 @@
             return $http(req);
         }
 
-        var getClients = function (page) {
+        var getClients = function () {
             var req = {
                 method: 'GET',
-                url: '/getClients',
-                params: {
-                    page: page
-                }
+                url: '/getClients'
             };
 
             return $http(req);
         }
+
+        //socket.emit('join', {});
+
+        /*socket.on('newClient', function(client) {
+            // use the socket as usual
+            console.log('new client have been register to the app', client);
+
+            dataContext.addClients([client]);
+        });
+
+        socket.on('updateClientsStatus', function(updateObj) {
+            // use the socket as usual
+            console.log('clients join or disconnect from app', updateObj);
+        });*/
 
         var service = {
             registerNewClient: registerNewClient,

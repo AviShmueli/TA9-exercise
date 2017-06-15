@@ -16,8 +16,6 @@
         
         var vm = this;
 
-        
-        //alert(self.client);
     }
 
 }());

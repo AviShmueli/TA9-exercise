@@ -1,6 +1,6 @@
 <md-toolbar flex>
   <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
-    <md-button class="md-icon-button" aria-label="Menu" ng-click="vm.toggle()">
+    <md-button class="md-icon-button" aria-label="Menu" ng-click="vm.toggleSidenav('left')">
       <md-icon>menu</md-icon>
     </md-button>
     <p>{{ vm.title }}</p>
@@ -29,7 +29,7 @@
       <client-view client="currClient"></client-view>
     </md-grid-tile>
   </md-grid-list>
-  <div ng-if="vm.allClients === undefined || vm.allClients.length === 0"
+  <div ng-if="vm.allClients === undefined || vm.allClients.length === 0 && vm.loading === false"
        layout-align="center center" layout="row">
     <h2>There is no clients connected to the server !</h2>
   </div>

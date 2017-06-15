@@ -4,56 +4,80 @@
 
     BL.registerNewClient = registerNewClient;
     BL.getClients = getClients;
+    BL.addClientToAliveList = addClientToAliveList;
+    BL.getUpdateAdminObject = getUpdateAdminObject;
 
     var deferred = require('deferred');
+    var uuid = require('uuid');
 
-    var DAL = require('./DAL');
+    var clients = new Map();
+    var aliveClients = new Map();
+    var oldAliveClients = null;
 
     function registerNewClient(client) {
+        
+        // genrate new guid
+        client["id"] = uuid.v4(); 
 
-        var d = deferred();
+        // add the new client to the dictionery
+        clients.set(client.id, client);
 
-        DAL.registerNewClient(client).then(function () {
-            d.resolve(client);
-        }, function (error) {
-            d.deferred(error);
-        });
+        addClientToAliveList(client.id);
+    }
 
-        return d.promise;
+    function addClientToAliveList(clientId){
+        aliveClients.set(clientId, clientId);
     }
 
 
 
-    function getClients(page) {
+    function getClients() {
+        var connectedClients = [];
 
-        var d = deferred();
+        clients.forEach(function(value, key) {
+            connectedClients.push(value);
+        }, this);
 
-        DAL.getClients(page).then(function (result) {
-            d.resolve(result);
-        }, function (error) {
-            d.deferred(error);
-        });
+        return connectedClients;
+    }
 
-        return d.promise;
+    
+
+
+    function getUpdateAdminObject(){
+        
+        var disconnectedClients = [];
+        var connectedClients = [];
+
+        if (oldAliveClients !== null) {                
+            oldAliveClients.forEach(function(element) {
+                if (!aliveClients.has(element)) {
+                    disconnectedClients.push(element);
+                }
+            }, this);
+        }
+        else{
+           oldAliveClients = new Map();         
+        }
+
+      
+        aliveClients.forEach(function(element) {
+            if (!oldAliveClients.has(element)) {
+                connectedClients.push(element);
+            }
+        }, this);
+
+        oldAliveClients = aliveClients;
+        aliveClients = new Map();
+
+        if (connectedClients.length > 0 || disconnectedClients.length > 0) {
+            return {'disconnectedClients': disconnectedClients, 'connectedClients': connectedClients};
+        }
+        else{
+            return null;
+        }
     }
 
 
 
 })(module.exports);
-
-/*
-
-function CCCC(DDD){
-    
-    var d = deferred();
-
-    DAL.AAA().then(function(result) {
-        d.resolve(result);
-    }, function(error) {
-        d.deferred(error);
-    });
-
-    return d.promise;
-}
-
-*/
