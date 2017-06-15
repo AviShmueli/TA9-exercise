@@ -23,12 +23,12 @@
 
         var getBrowserName = function () {
             var browserName = 'Unknown Browser';
+            if (navigator.userAgent.indexOf("Chrome") != -1) browserName = "Chrome";
+            else if (navigator.userAgent.indexOf("Safari") != -1) browserName = "Safari";
             if (navigator.userAgent.indexOf("Opera") != -1) browserName = "Opera";
             if (navigator.userAgent.indexOf("MSIE") != -1) browserName = "Internet Explorer";
             if (navigator.userAgent.indexOf("Trident") != -1) browserName = "Internet Explorer";
-            if (navigator.userAgent.indexOf("Edge") != -1) browserName = "Internet Edge";
-            if (navigator.userAgent.indexOf("Chrome") != -1) browserName = "Chrome";
-            else if (navigator.userAgent.indexOf("Safari") != -1) browserName = "Safari";
+            if (navigator.userAgent.indexOf("Edge") != -1) browserName = "Internet Edge";        
             if (navigator.userAgent.indexOf("Firefox") != -1) browserName = "Firefox";
             return browserName;
         }
