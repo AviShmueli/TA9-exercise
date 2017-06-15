@@ -99,9 +99,7 @@ body {
 }
 
 .client-view-wrap {
-    padding: 4px; 
-    margin: 1em; 
-    width: 22em; 
+    max-width: 22em; 
     height: 13em;
 }
 
