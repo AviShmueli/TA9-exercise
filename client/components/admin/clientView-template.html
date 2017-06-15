@@ -8,8 +8,8 @@
         </div>
         <div layout="column" flex layout-align="center center">
             <span> 
-                <img ng-if="vm.client.isConnected" ng-src="assets/images/globe_connected.png" aria-label="connected"></img>
-                <img ng-if="!vm.client.isConnected" ng-src="assets/images/globe_disconnected.png" aria-label="disconnected"></img>
+                <img class="status-img" ng-if="vm.client.isConnected" ng-src="assets/images/globe_connected.png" aria-label="connected"></img>
+                <img class="status-img" ng-if="!vm.client.isConnected" ng-src="assets/images/globe_disconnected.png" aria-label="disconnected"></img>
             </span>
         </div>
     </div>

@@ -32,7 +32,7 @@
         }
 
         socket.on('newClient', function(client) {
-            dataContext.addClients([client]);
+            dataContext.addClient(client);
         });
 
         socket.on('updateClientsStatus', function(updateObj) {

@@ -7,11 +7,11 @@
 
     ClientController.$inject = [
         '$rootScope', '$scope', 'server', '$state', '$interval',
-        '$log', 'device'
+        '$log', 'device', 'dataContext'
     ];
 
     function ClientController($rootScope, $scope, server, $state, $interval,
-        $log, device) {
+        $log, device, dataContext) {
 
         var vm = this;
 
@@ -26,16 +26,24 @@
             isConnected: true
         };
 
+        var clientId = dataContext.getClientId();
+        if (clientId !== null) {
+            client['id'] = clientId;
+        }
+
         server.registerNewClient(client).then(function (result) {
             if (result.data !== undefined) {
                 vm.client = result.data;
+                dataContext.setClientId(vm.client.id);
             }
         }, function (error) {
             $log.error('Error while tying to register new client to the app: ', error);
         });
 
         $interval(function () {
-            server.keepMeAlive(vm.client.id);
+            if (vm.client !== null && vm.client.id !== undefined) {
+                 server.keepMeAlive(vm.client.id);           
+            }
         }, 10000);
 
 

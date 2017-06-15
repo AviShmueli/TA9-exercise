@@ -99,9 +99,16 @@ body {
 }
 
 .client-view-wrap {
-    max-width: 22em; 
     height: 13em;
+    padding: 4px; 
+     margin: 1em; 
+     width: 19em;
 }
 
 md-grid-list {
-  margin: 8px; }
+  margin: 8px; 
+}
+
+.status-img {
+    width: 96px;
+}

@@ -6,6 +6,7 @@
     BL.getClients = getClients;
     BL.addClientToAliveList = addClientToAliveList;
     BL.getUpdateAdminObject = getUpdateAdminObject;
+    BL.registerExistsClient = registerExistsClient;
 
     var deferred = require('deferred');
     var uuid = require('uuid');
@@ -22,6 +23,14 @@
         // add the new client to the dictionery
         clients.set(client.id, client);
 
+        addClientToAliveList(client.id);
+    }
+
+    function registerExistsClient(client){
+        if (!clients.has(client.id)) {
+            clients.set(client.id, client);
+            addClientToAliveList(client.id);
+        }
         addClientToAliveList(client.id);
     }
 

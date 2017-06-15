@@ -10,7 +10,7 @@
     function dataContext($rootScope, $localStorage) {
 
         var self = this;
-        //self.$storage = $localStorage;
+        self.$storage = $localStorage;
 
         var getClients = function () {
             return self.clientsList !== undefined ? self.clientsList : [];
@@ -35,16 +35,29 @@
             $rootScope.$apply()
         }
 
-        var addClients = function (clients) {
-            setClients(getClients().concat(clients));
+        var addClient = function (client) {
+            var clients = getClients();
+            if (clients.indexOf(client.id) === -1) {
+                clients.push(client);
+            }
             $rootScope.$apply();
+        }
+
+        var setClientId = function(clientId){
+            self.$storage.clientId = clientId;
+        }
+
+        var getClientId = function(clientId){
+            return self.$storage.clientId || null;
         }
 
         var service = {
             getClients: getClients,
             setClients: setClients,
             updateClientsStatus: updateClientsStatus,
-            addClients: addClients
+            addClient: addClient,
+            setClientId: setClientId,
+            getClientId: getClientId
         };
 
         return service;

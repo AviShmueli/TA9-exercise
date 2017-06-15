@@ -22,7 +22,6 @@
         vm.toggle = angular.noop;
 
         vm.title = $state.current.title;
-        //vm.allClients = [];
         vm.allClients = dataContext.getClients();
         vm.loading = false;
 
@@ -45,16 +44,6 @@
         vm.toggleSidenav = function (menuId) {
             $mdSidenav(menuId).toggle();
         };
-
-        /*$timeout(function(){
-            server.getClients(0).then(function (result) {
-                dataContext.addClients(result.data);
-            }, function (error) {
-                $log.error('Error while tying to get all clients :', error);
-            });
-        }, 10000);*/
-
-
     }
 
 })();

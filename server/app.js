@@ -46,6 +46,7 @@ app.post('/registerNewClient', function (req, res) {
         console.log('info', 'New client just connected to the app: ' , client);
     }
     else{
+        BL.registerExistsClient(client);
         res.send(client);
         console.log('info', 'Client reconnected to the app: ' , client);
     }
@@ -59,14 +60,8 @@ app.post('/keepMeAlive', function (req, res) {
 });
 
 app.get('/getClients', function (req, res) {
-
     var clients = BL.getClients()
     res.send(clients);
-    //}, function (error) {
-    //    logger.log('error', error.message, error.error);
-    //    res.status(500).send(error);
-    //});
-
 });
 
 var getClientIP = function(req){
