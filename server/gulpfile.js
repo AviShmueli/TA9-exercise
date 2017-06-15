@@ -42,7 +42,7 @@ gulp.task('serve', ['style', 'inject'], function() {
         script: 'app.js',
         delayTime: 1,
         env: {
-            'PORT': 5001
+            'PORT': 5009
         },
         watch: jsFiles
     };

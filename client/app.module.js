@@ -6,7 +6,6 @@
             'ui.router',
             'ngMaterial',
             'ngStorage',
-
         ]);
 
 })();

@@ -23,12 +23,6 @@ app.use(express.static('./client'));
 app.use(express.static('./bower_components'));
 app.use(express.static('./node_modules'));
 
-/* ----- cron  ------
-var jobs = require('./cron-jobs');
- */
-
-
-
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5009, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);

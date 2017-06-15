@@ -16,7 +16,6 @@
         $mdSidenav, $mdComponentRegistry, $log,
         dataContext, $timeout, socket) {
 
-
         var vm = this;
 
         vm.toggle = angular.noop;

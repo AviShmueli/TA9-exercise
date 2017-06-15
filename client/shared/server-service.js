@@ -9,7 +9,6 @@
 
     function server($http, dataContext) {
 
-
         var self = this;
 
         var registerNewClient = function (client) {

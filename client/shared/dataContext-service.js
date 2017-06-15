@@ -14,16 +14,14 @@
 
         var getClients = function () {
             return self.clientsList !== undefined ? self.clientsList : [];
-            //return self.$storage.clientsList !== undefined ? self.$storage.clientsList : [];
         }
 
         var setClients = function (clients) {
             self.clientsList = clients;
-            //self.$storage.clientsList = clients;
         }
 
         var updateClientsStatus = function (clients, status) {
-            
+      
             var matchs = getClients().filter(function (obj) {
                 return clients.indexOf(obj.id) !== -1;
             });
@@ -40,6 +38,7 @@
             if (clients.indexOf(client.id) === -1) {
                 clients.push(client);
             }
+            
             $rootScope.$apply();
         }
 

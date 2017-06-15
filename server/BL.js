@@ -8,7 +8,6 @@
     BL.getUpdateAdminObject = getUpdateAdminObject;
     BL.registerExistsClient = registerExistsClient;
 
-    var deferred = require('deferred');
     var uuid = require('uuid');
 
     var clients = new Map();
@@ -38,8 +37,6 @@
         aliveClients.set(clientId, clientId);
     }
 
-
-
     function getClients() {
         var connectedClients = [];
 
@@ -50,14 +47,12 @@
         return connectedClients;
     }
 
-    
-
-
     function getUpdateAdminObject(){
         
         var disconnectedClients = [];
         var connectedClients = [];
 
+        // check for disconnected clients
         if (oldAliveClients !== null) {                
             oldAliveClients.forEach(function(element) {
                 if (!aliveClients.has(element)) {
@@ -68,8 +63,8 @@
         else{
            oldAliveClients = new Map();         
         }
-
-      
+        
+        // check for new connected clients
         aliveClients.forEach(function(element) {
             if (!oldAliveClients.has(element)) {
                 connectedClients.push(element);
@@ -82,9 +77,8 @@
         if (connectedClients.length > 0 || disconnectedClients.length > 0) {
             return {'disconnectedClients': disconnectedClients, 'connectedClients': connectedClients};
         }
-        else{
-            return null;
-        }
+        
+        return null;        
     }
 
 
